@@ -1,3 +1,5 @@
+import {Action} from "./actions.js";
+
 const initialState = {
     isWaiting: false,
     statements: [
@@ -9,7 +11,22 @@ const initialState = {
 };
 
 function reducer(state=initialState, action) {
-    return state;
+    switch(action.type) {
+        case Action.LoadStatements:
+            return {
+                ...state,
+                statements: action.payload,
+            }
+
+        case Action.FinishAddingStatement:
+            return {
+                ...state,
+                statements: [action.payload, ...state.statements],
+            }
+        default:
+            return state;
+    }
+    
 }
 
 export default reducer;

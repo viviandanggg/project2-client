@@ -3,6 +3,7 @@ import React from 'react';
 export function Statement(props) {
     const statement = props.statement;
 
+
     return (
         <div className="statement-root">
             <div className="statement-left">
