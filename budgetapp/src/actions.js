@@ -2,6 +2,9 @@
 export const Action = Object.freeze({
     LoadStatements: 'LoadStatements',
     FinishAddingStatement: 'FinishAddingStatement',
+    EnterEditMode: 'EnterEditMode',
+    LeaveEditMode: 'LeaveEditMode',
+    FinishSavingStatement: 'FinishSavingStatement',
 });
 
 
@@ -15,6 +18,27 @@ export function loadStatements(statements) {
 export function finishAddingStatement(statement) {
     return {
         type: Action.FinishAddingStatement,
+        payload: statement,
+    }
+}
+
+export function finishSavingStatement(statement) {
+    return {
+        type: Action.FinishSavingStatement,
+        payload: statement,
+    }
+}
+
+export function enterEditMode(statement) {
+    return {
+        type: Action.EnterEditMode,
+        payload: statement,
+    }
+}
+
+export function leaveEditMode(statement) {
+    return {
+        type: Action.LeaveEditMode,
         payload: statement,
     }
 }
@@ -45,7 +69,7 @@ export function loadYear(year) {
 
 
 export function startAddingStatement(year, month, day) {
-    const statement = {amount: 0, category: "", description: "", year, month, day, increase: 0};
+    const statement = {id: 0, amount: 0, category: "", description: "", year, month, day, increase: 0};
     const options = {
         method: 'POST',
         headers: {
@@ -55,13 +79,35 @@ export function startAddingStatement(year, month, day) {
     }
     return dispatch => {
 
-        fetch(`${host}/statements`)
+        fetch(`${host}/statements`, options)
             .then(checkForErrors)
             .then(response => response.json())
             .then(data => {
                 if (data.ok) {
                    statement.id = data.id;
                    dispatch(finishAddingStatement(statement));
+                }
+            })
+            .catch(e => console.error(e));
+    }
+}
+
+export function startSavingStatement(statement) {
+    const options = {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(statement),
+    }
+    return dispatch => {
+        fetch(`${host}/statements/${statement.id}`, options)
+            .then(checkForErrors)
+            .then(response => response.json())
+            .then(data => {
+                console.log(statement.id);
+                if (data.ok) {
+                   dispatch(finishSavingStatement(statement));
                 }
             })
             .catch(e => console.error(e));

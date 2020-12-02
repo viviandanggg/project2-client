@@ -24,3 +24,11 @@
     transform: rotate(360deg);
   }
 }
+
+.statements-root {
+  background-color: rgb(220, 245, 253);
+}
+
+.statement-root {
+  background-color: rgb(223, 255, 223);
+}
