@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { enterEditMode, leaveEditMode, startSavingStatement } from './actions';
+import { enterEditMode, leaveEditMode, startSavingStatement , startDeletingStatement} from './actions';
 
 export function Statement(props) {
     const statement = props.statement;
@@ -35,13 +35,17 @@ export function Statement(props) {
         }));
     }
 
+    const onDelete = () => {
+        dispatch(startDeletingStatement(statement));
+    }
+
     if (statement.isEditing) {
         return (
             <div className="statement-root">
                 
                 <div className="statement-left">
                     
-                    <label for="categories">
+                    <label htmlFor="categories">
                         <select name="categories" className="categories" value={category} onChange={e => setCategory(e.target.value)}>
                             <option value=""></option>
                             <option value="Groceries">Groceries</option>
@@ -55,12 +59,13 @@ export function Statement(props) {
                     
                     <button onClick={onSave}>save</button>
                     <button onClick={onCancel}>cancel</button>
+                    <button onClick={onDelete} className="delete-button">delete</button>
 
                 </div>
                 <div className="statement-right">
                     
                     <input type="number" step="0.01" value={amount} onChange={e => setAmount(e.target.value)} />
-                    <label for="increase">Desposit
+                    <label htmlFor="increase">Desposit
                         <input type="checkbox" id="increase" value={increase} onChange={e => setIncrease(e.target.value)}/>
                     </label>
                     <input type="text" value={year} onChange={e => setYear(parseInt(e.target.value))} />

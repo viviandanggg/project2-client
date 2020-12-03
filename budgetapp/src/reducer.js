@@ -21,7 +21,7 @@ function reducer(state=initialState, action) {
         case Action.FinishAddingStatement:
             return {
                 ...state,
-                statements: [action.payload, ...state.statements],
+                statements: [{...action.payload, isEditing: true}, ...state.statements],
             }
         case Action.EnterEditMode:
             return {
@@ -56,6 +56,11 @@ function reducer(state=initialState, action) {
                     }
                 })
             }
+        case Action.FinishDeletingStatement:
+            return {
+                ...state,
+                statements: state.statements.filter(statement => statement.id !== action.payload.id),
+            };      
         default:
             return state;
     }

@@ -5,6 +5,7 @@ export const Action = Object.freeze({
     EnterEditMode: 'EnterEditMode',
     LeaveEditMode: 'LeaveEditMode',
     FinishSavingStatement: 'FinishSavingStatement',
+    FinishDeletingStatement: 'FinishDeletingStatement',
 });
 
 
@@ -25,6 +26,13 @@ export function finishAddingStatement(statement) {
 export function finishSavingStatement(statement) {
     return {
         type: Action.FinishSavingStatement,
+        payload: statement,
+    }
+}
+
+export function finishDeletingStatement(statement) {
+    return {
+        type: Action.FinishDeletingStatement,
         payload: statement,
     }
 }
@@ -60,7 +68,7 @@ export function loadYear(year) {
             .then(response => response.json())
             .then(data => {
                 if (data.ok) {
-                   dispatch(loadStatements(data.statements))
+                   dispatch(loadStatements(data.budget))
                 }
             })
             .catch(e => console.error(e));
@@ -105,9 +113,25 @@ export function startSavingStatement(statement) {
             .then(checkForErrors)
             .then(response => response.json())
             .then(data => {
-                console.log(statement.id);
                 if (data.ok) {
                    dispatch(finishSavingStatement(statement));
+                }
+            })
+            .catch(e => console.error(e));
+    }
+}
+
+export function startDeletingStatement(statement) {
+    const options = {
+        method: 'DELETE',
+    }
+    return dispatch => {
+        fetch(`${host}/statements/${statement.id}`, options)
+            .then(checkForErrors)
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
+                   dispatch(finishDeletingStatement(statement));
                 }
             })
             .catch(e => console.error(e));
