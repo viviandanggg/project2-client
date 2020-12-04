@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { enterEditMode, leaveEditMode, startSavingStatement , startDeletingStatement} from './actions';
+import { enterEditMode, leaveEditMode, startSavingStatement , startDeletingStatement, loadYearlySum, loadYear} from './actions';
 
 export function Statement(props) {
     const statement = props.statement;
@@ -33,6 +33,10 @@ export function Statement(props) {
             description,
             increase,
         }));
+
+        window.location.reload();
+        // dispatch(loadYear(year));
+        // dispatch(loadYearlySum(year));
     }
 
     const onDelete = () => {
@@ -41,12 +45,19 @@ export function Statement(props) {
 
     if (statement.isEditing) {
         return (
-            <div className="statement-root">
-                
+            <div className="statement-root font">
                 <div className="statement-left">
-                    
-                    <label htmlFor="categories">
-                        <select name="categories" className="categories" value={category} onChange={e => setCategory(e.target.value)}>
+                    <input type="number" step="0.01" value={amount} onChange={e => setAmount(e.target.value)} />
+                    <input type="radio" value="Withdrawal" name="increase" onChange={e => setIncrease(0)}/> Withdrawal
+                    <input type="radio" value="Deposit" name="increase" onChange={e => setIncrease(1)}/> Deposit
+                    <input type="number" value={year} onChange={e => setYear(e.target.value)} />
+                    <input type="number" value={month} onChange={e => setMonth(e.target.value)} />
+                    <input type="number" value={day} onChange={e => setDay(e.target.value)} />
+                </div>
+                <div className="statement-right">
+                <label htmlFor="categories">
+                        Category:
+                        <select name="categories" className="category" value={category} onChange={e => setCategory(e.target.value)}>
                             <option value=""></option>
                             <option value="Groceries">Groceries</option>
                             <option value="Shopping">Shopping</option>
@@ -56,21 +67,9 @@ export function Statement(props) {
                         </select>
                     </label>
                     <input type="text" value={description} onChange={e => setDescription(e.target.value)} />
-                    
                     <button onClick={onSave}>save</button>
                     <button onClick={onCancel}>cancel</button>
                     <button onClick={onDelete} className="delete-button">delete</button>
-
-                </div>
-                <div className="statement-right">
-                    
-                    <input type="number" step="0.01" value={amount} onChange={e => setAmount(e.target.value)} />
-                    <label htmlFor="increase">Desposit
-                        <input type="checkbox" id="increase" value={increase} onChange={e => setIncrease(e.target.value)}/>
-                    </label>
-                    <input type="text" value={year} onChange={e => setYear(parseInt(e.target.value))} />
-                    <input type="text" value={month} onChange={e => setMonth(parseInt(e.target.value))} />
-                    <input type="text" value={day} onChange={e => setDay(parseInt(e.target.value))} />
                 </div>
             </div>
         );
@@ -78,15 +77,15 @@ export function Statement(props) {
     } else {
 
         return (
-            <div className="statement-root">
+            <div className="statement-root font">
                 <div className="statement-left">
-                    <span className="category">{statement.category}</span>
+                    <span className="amount">${statement.amount}</span>
                     <span className="date">{statement.month}/{statement.day}/{statement.year}</span>
-                    <button onClick={onEdit}>edit</button>
                 </div>
                 <div className="statement-right">
-                    <span className="amount">{statement.amount}</span>
-                    <span className="amount">{statement.description}</span>
+                    <span className="category">{statement.category}</span>
+                    <span className="description">{statement.description}</span>
+                    <button onClick={onEdit}>edit</button>
                 </div>
             </div>
         );

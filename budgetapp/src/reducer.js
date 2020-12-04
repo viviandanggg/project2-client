@@ -8,6 +8,7 @@ const initialState = {
     //     {id: 3, amount: 50.32, category: "Clothes", description: "Target", year: 2020, month: 2, day: 20},
     //     {id: 4, amount: 200.00, category: "Income", description: "Worked 9-5", year: 2020, month: 9, day: 23, increase: 1},
     ],
+    sum: [],
 };
 
 function reducer(state=initialState, action) {
@@ -17,7 +18,11 @@ function reducer(state=initialState, action) {
                 ...state,
                 statements: action.payload,
             }
-
+        case Action.LoadSum:
+            return {
+                ...state,
+                sum: action.payload,
+            }
         case Action.FinishAddingStatement:
             return {
                 ...state,

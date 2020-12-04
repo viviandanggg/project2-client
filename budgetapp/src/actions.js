@@ -6,6 +6,7 @@ export const Action = Object.freeze({
     LeaveEditMode: 'LeaveEditMode',
     FinishSavingStatement: 'FinishSavingStatement',
     FinishDeletingStatement: 'FinishDeletingStatement',
+    LoadSum: 'LoadSum',
 });
 
 
@@ -15,6 +16,14 @@ export function loadStatements(statements) {
         payload: statements,
     }
 }
+
+export function loadSum(sum) {
+    return {
+        type: Action.LoadSum,
+        payload: sum,
+    }
+}
+
 
 export function finishAddingStatement(statement) {
     return {
@@ -75,6 +84,19 @@ export function loadYear(year) {
     }
 }
 
+export function loadYearlySum(year) {
+    return dispatch => {
+        fetch(`${host}/statements/sum/${year}`)
+            .then(checkForErrors)
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
+                   dispatch(loadSum(data.budget))
+                }
+            })
+            .catch(e => console.error(e));
+    }
+}
 
 export function startAddingStatement(year, month, day) {
     const statement = {id: 0, amount: 0, category: "", description: "", year, month, day, increase: 0};
