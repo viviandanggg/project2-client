@@ -42,53 +42,101 @@ export function Statement(props) {
     const onDelete = () => {
         dispatch(startDeletingStatement(statement));
     }
-
+    
     if (statement.isEditing) {
-        return (
-            <div className="statement-root font">
-                <div className="statement-left">
-                    <input type="number" step="0.01" value={amount} onChange={e => setAmount(e.target.value)} />
-                    <input type="radio" value="Withdrawal" name="increase" onChange={e => setIncrease(0)}/> Withdrawal
-                    <input type="radio" value="Deposit" name="increase" onChange={e => setIncrease(1)}/> Deposit
-                    <input type="number" value={year} onChange={e => setYear(e.target.value)} />
-                    <input type="number" value={month} onChange={e => setMonth(e.target.value)} />
-                    <input type="number" value={day} onChange={e => setDay(e.target.value)} />
+        if (increase === 0) {
+            return (
+                <div className="statement-root font">
+                    <div className="statement-left">
+                        <input type="number" step="0.01" value={amount} onChange={e => setAmount(e.target.value)} />
+                        <input type="radio" value="Withdrawal" name="increase" onChange={e => setIncrease(0)} defaultChecked/> Withdrawal
+                        <input type="radio" value="Deposit" name="increase" onChange={e => setIncrease(1)}/> Deposit
+                        <input type="number" value={year} onChange={e => setYear(e.target.value)} />
+                        <input type="number" value={month} onChange={e => setMonth(e.target.value)} />
+                        <input type="number" value={day} onChange={e => setDay(e.target.value)} />
+                    </div>
+                    <div className="statement-right">
+                    <label htmlFor="categories">
+                            Category:
+                            <select name="categories" className="category" value={category} onChange={e => setCategory(e.target.value)}>
+                                <option value=""></option>
+                                <option value="Groceries">Groceries</option>
+                                <option value="Shopping">Shopping</option>
+                                <option value="Transportation">Transportation</option>
+                                <option value="Entertainment">Entertainment</option>
+                                <option value="Income">Income</option>
+                            </select>
+                        </label>
+                        <input type="text" value={description} onChange={e => setDescription(e.target.value)} />
+                        <button onClick={onSave}>save</button>
+                        <button onClick={onCancel}>cancel</button>
+                        <button onClick={onDelete} className="delete-button">delete</button>
+                    </div>
                 </div>
-                <div className="statement-right">
-                <label htmlFor="categories">
-                        Category:
-                        <select name="categories" className="category" value={category} onChange={e => setCategory(e.target.value)}>
-                            <option value=""></option>
-                            <option value="Groceries">Groceries</option>
-                            <option value="Shopping">Shopping</option>
-                            <option value="Transportation">Transportation</option>
-                            <option value="Entertainment">Entertainment</option>
-                            <option value="Income">Income</option>
-                        </select>
-                    </label>
-                    <input type="text" value={description} onChange={e => setDescription(e.target.value)} />
-                    <button onClick={onSave}>save</button>
-                    <button onClick={onCancel}>cancel</button>
-                    <button onClick={onDelete} className="delete-button">delete</button>
+            );
+        } else {
+            return (
+                <div className="statement-root font">
+                    <div className="statement-left">
+                        <input type="number" step="0.01" value={amount} onChange={e => setAmount(e.target.value)} />
+                        <input type="radio" value="Withdrawal" name="increase" onChange={e => setIncrease(0)}/> Withdrawal
+                        <input type="radio" value="Deposit" name="increase" onChange={e => setIncrease(1)} defaultChecked/> Deposit
+                        <input type="number" value={year} onChange={e => setYear(e.target.value)} />
+                        <input type="number" value={month} onChange={e => setMonth(e.target.value)} />
+                        <input type="number" value={day} onChange={e => setDay(e.target.value)} />
+                    </div>
+                    <div className="statement-right">
+                    <label htmlFor="categories">
+                            Category:
+                            <select name="categories" className="category" value={category} onChange={e => setCategory(e.target.value)}>
+                                <option value=""></option>
+                                <option value="Groceries">Groceries</option>
+                                <option value="Shopping">Shopping</option>
+                                <option value="Transportation">Transportation</option>
+                                <option value="Entertainment">Entertainment</option>
+                                <option value="Income">Income</option>
+                            </select>
+                        </label>
+                        <input type="text" value={description} onChange={e => setDescription(e.target.value)} />
+                        <button onClick={onSave}>save</button>
+                        <button onClick={onCancel}>cancel</button>
+                        <button onClick={onDelete} className="delete-button">delete</button>
+                    </div>
                 </div>
-            </div>
-        );
+            );
+        }
 
     } else {
-
-        return (
-            <div className="statement-root font">
-                <div className="statement-left">
-                    <span className="amount">${statement.amount}</span>
-                    <span className="date">{statement.month}/{statement.day}/{statement.year}</span>
+        console.log({increase});
+        if (increase === 0) {
+            return (
+                <div className="statement-root font withdrawal">
+                    <div className="statement-left">
+                        <span className="amount">-${amount}</span>
+                        <span className="date">{month}/{day}/{year}</span>
+                    </div>
+                    <div className="statement-right">
+                        <span className="category">{category}</span>
+                        <span className="description">{description}</span>
+                        <button onClick={onEdit}>edit</button>
+                    </div>
                 </div>
-                <div className="statement-right">
-                    <span className="category">{statement.category}</span>
-                    <span className="description">{statement.description}</span>
-                    <button onClick={onEdit}>edit</button>
+            );
+        } else {
+            return (
+                <div className="statement-root font  deposit">
+                    <div className="statement-left">
+                        <span className="amount">${amount}</span>
+                        <span className="date">{month}/{day}/{year}</span>
+                    </div>
+                    <div className="statement-right">
+                        <span className="category">{category}</span>
+                        <span className="description">{description}</span>
+                        <button onClick={onEdit}>edit</button>
+                    </div>
                 </div>
-            </div>
-        );
+            );
+        }
 
     }
 }

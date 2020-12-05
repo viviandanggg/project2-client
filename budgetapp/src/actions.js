@@ -1,4 +1,3 @@
-
 export const Action = Object.freeze({
     LoadStatements: 'LoadStatements',
     FinishAddingStatement: 'FinishAddingStatement',
@@ -7,8 +6,22 @@ export const Action = Object.freeze({
     FinishSavingStatement: 'FinishSavingStatement',
     FinishDeletingStatement: 'FinishDeletingStatement',
     LoadSum: 'LoadSum',
+    LoadSumMonth: 'LoadSumMonth',
+    StopWaiting: 'StopWaiting',
+    StartWaiting: 'StartWaiting',
 });
 
+export function stopWaiting() {
+    return {
+        type: Action.StopWaiting,
+    }
+}
+
+export function startWaiting() {
+    return {
+        type: Action.StartWaiting,
+    }
+}
 
 export function loadStatements(statements) {
     return {
@@ -17,13 +30,19 @@ export function loadStatements(statements) {
     }
 }
 
-export function loadSum(sum) {
+export function loadSum(sumYear) {
     return {
         type: Action.LoadSum,
-        payload: sum,
+        payload: sumYear,
     }
 }
 
+export function loadSumMonth(sumMonth) {
+    return {
+        type: Action.LoadSumMonth,
+        payload: sumMonth,
+    }
+}
 
 export function finishAddingStatement(statement) {
     return {
@@ -90,8 +109,24 @@ export function loadYearlySum(year) {
             .then(checkForErrors)
             .then(response => response.json())
             .then(data => {
+                console.log("year" + data);
                 if (data.ok) {
                    dispatch(loadSum(data.budget))
+                }
+            })
+            .catch(e => console.error(e));
+    }
+}
+
+export function loadMonthlySum(month, year) {
+    return dispatch => {
+        fetch(`${host}/statements/sum/${month}/${year}`)
+            .then(checkForErrors)
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
+                    console.log("month" + data.budget);
+                   dispatch(loadSumMonth(data.budget))
                 }
             })
             .catch(e => console.error(e));
@@ -131,6 +166,7 @@ export function startSavingStatement(statement) {
         body: JSON.stringify(statement),
     }
     return dispatch => {
+        dispatch(startWaiting());
         fetch(`${host}/statements/${statement.id}`, options)
             .then(checkForErrors)
             .then(response => response.json())
@@ -138,6 +174,8 @@ export function startSavingStatement(statement) {
                 if (data.ok) {
                    dispatch(finishSavingStatement(statement));
                 }
+                dispatch(stopWaiting());
+                //setTimeout(() => dispatch(stopWaiting(), 10000));
             })
             .catch(e => console.error(e));
     }

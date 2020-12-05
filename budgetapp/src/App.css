@@ -44,22 +44,58 @@ button {
 #root {
   background-color: rgb(255, 255, 242);
   height: 100vh;
+  display: flex;
+  align-content: center;
+  justify-content: center;
 }
 
-.statements-root {
-  /* margin: 0 300px; */
+.spending {
+  width: 490px;
+  height: 60px;
+  border-radius: 15px;
+  background-color: rgb(211, 211, 211);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
 }
+
+.yearly-spending {
+  justify-content: flex-end;
+  /* align-self: flex-end; */
+}
+
+.monthly-spending {
+  justify-content: flex-end;
+  /* align-self: flex-start; */
+}
+
+#total-spendings {
+  width: 1000px;
+  /* display: grid;
+  grid-template-columns: auto auto;
+  column-gap: 10px; */
+
+  display: flex;
+  justify-content: space-between;
+
+  /* display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  */
+} 
 
 .statement-root {
   width: 1000px;
   margin: 10px auto;
   padding: 20px;
   border-radius: 15px;
-  background-color: rgba(223, 255, 223);
+  background-color: rgb(223, 242, 255);
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;;
+  justify-content: center;
 }
 
 .statement-left, .statement-right {
@@ -80,6 +116,14 @@ button {
   font-size: 1.75em;
 }
 
+.withdrawal {
+  background-color: rgb(255, 234, 234);
+}
+
+.deposit {
+  background-color:  rgba(223, 255, 223);
+}
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     /* display: none; <- Crashes Chrome on hover */
@@ -89,4 +133,23 @@ input::-webkit-inner-spin-button {
 
 input[type=number] {
     -moz-appearance:textfield; /* Firefox */
+}
+
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 16px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+  margin-left: 45%;
+  margin-top: 50px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
