@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato&family=Open+Sans+Condensed:wght@300&display=swap');
 .App {
   text-align: center;
 }
@@ -25,122 +26,238 @@
   }
 }
 
-.font {
-  font-family: 'Source Sans Pro', sans-serif;
-  font-weight: 400;
+#root {
+  background-color: #d1e5c9;
 }
 
-h1 {
-  text-align: center;
-  padding: 25px 0px;
-  margin: 0;
-  font-size: 2.5em;
+.loader-root {
+  height: 100vh;
 }
 
-button {
+.main-root {
+  margin: 0px 120px;
+}
+
+.main-font {
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-weight: 300;
+}
+
+.supporting-font {
+  font-family: 'Lato', sans-serif;
+}
+
+.title {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: center;
+}
+
+.title > img {
+  width: 75px;
+  margin: 0px 20px;
+}
+
+.title > h1 {
+  margin: 25px 0px 0px 0px;
+  font-size: 4em;
+}
+
+.tagline {
+  font-size: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px 0px 50px 0px;
+}
+
+button, select, select > option, .increase > label > input {
   cursor: pointer;
 }
 
-#root {
-  background-color: rgb(255, 255, 242);
-  height: 100vh;
-  display: flex;
-  align-content: center;
-  justify-content: center;
+button {
+  background-color:gray;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  font-size: .75em;
+}
+
+button:hover {
+  background-color: rgba(128, 128, 128, .5);
+}
+
+#total-spendings, .statement-root {
+  display: grid;
+  grid-template-columns: auto auto;
+  column-gap: 20px;
+  align-items: center;
+  margin-bottom: 30px;
 }
 
 .spending {
-  width: 490px;
-  height: 60px;
-  border-radius: 15px;
-  background-color: rgb(211, 211, 211);
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-around;
-}
-
-.yearly-spending {
-  justify-content: flex-end;
-  /* align-self: flex-end; */
-}
-
-.monthly-spending {
-  justify-content: flex-end;
-  /* align-self: flex-start; */
-}
-
-#total-spendings {
-  width: 1000px;
-  /* display: grid;
-  grid-template-columns: auto auto;
-  column-gap: 10px; */
-
-  display: flex;
-  justify-content: space-between;
-
-  /* display: flex;
-  flex-direction: row;
   justify-content: center;
-  align-items: center;
-  */
-} 
+  border-radius: 15px;
+  box-shadow: 5px 5px 5px gray;
+  border: solid gray;
+}
+
+.spending > h3, .sum, .amount {
+  font-size: 2em;
+}
+
+.sum, .amount {
+  font-weight: 800;
+}
+
+.sum {
+  margin-left: 10px;
+}
+
+#add-button {
+  margin-top: 20px;
+  padding: 15px;
+}
+
+#sources {
+  margin-top: 30px;
+  padding-bottom: 10px;
+  font-size: .75em;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a:visited {
+  color: inherit;
+}
 
 .statement-root {
-  width: 1000px;
-  margin: 10px auto;
-  padding: 20px;
+  position: relative;
+  background-color: rgba(128, 128, 128, .5);
   border-radius: 15px;
-  background-color: rgb(223, 242, 255);
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
+  margin: 15px 0px;
+  padding: 25px 25px 40px 25px;
+  grid-template-columns: 50% 50%;
 }
 
 .statement-left, .statement-right {
   display: flex;
   flex-direction: column;
   justify-content: center;
-}
-
-.statement-left {
-  align-items: flex-end;
-}
-
-.statement-right {
+  justify-self: flex-start;
   align-items: flex-start;
 }
 
-.amount {
-  font-size: 1.75em;
+.date {
+  color: gray;
+  font-size: 1em;
+  margin-top: 10px;
 }
 
-.withdrawal {
-  background-color: rgb(255, 234, 234);
+.category {
+  font-size: 1.5em;
+  margin-bottom: 5px;
+}
+
+.description {
+  margin-bottom: 10px;
+  font-size: 1em;
+}
+
+.deposit, .withdrawal {
+  background-color: rgba(255, 255, 255, .7);
 }
 
 .deposit {
-  background-color:  rgba(223, 255, 223);
+  border: solid darkgreen;
+}
+
+.deposit .amount {
+  color: darkgreen;
+}
+
+.withdrawal {
+  border: solid #cb697e;
+}
+
+.withdrawal .amount {
+  color: #cb697e;
+}
+
+.edit-button, .editing-buttons {
+  position: absolute;
+  right: 1%;
+  bottom: 10%;
+  padding: 10px;
+}
+
+.editing-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: flex-end;
+  bottom: 0;
+  right: 0;
+}
+
+.editing-buttons > button {
+  margin: 0 5px;
+  padding: 10px;
+  color: black;
+  background-color: white;
+}
+
+.editing-buttons > button:hover {
+  background-color: rgba(255, 255, 255, .5);
+}
+
+.edit-statement{
+  margin: 10px;
+}
+
+.edit-statement > label, .edit-statement > div {
+  margin: 5px 0px;
+}
+
+input, select, .increase > label {
+  margin-left: 10px;
+}
+
+textarea {
+  margin-top: 2px;
+  height: 100%;
+  width: 100%;
+  padding: 5px;
+}
+
+input[type=number] {
+  appearance: none;
 }
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-    /* display: none; <- Crashes Chrome on hover */
+   
     -webkit-appearance: none;
-    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+    margin: 0; 
 }
 
 input[type=number] {
-    -moz-appearance:textfield; /* Firefox */
+    -moz-appearance:textfield; 
 }
 
 .loader {
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 16px solid #f3f3f3; /* Light grey */
-  border-top: 16px solid #3498db; /* Blue */
+  border: 16px solid white;
+  border-top: 16px solid #cb697e;
   border-radius: 50%;
   width: 120px;
   height: 120px;

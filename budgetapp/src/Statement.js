@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { enterEditMode, leaveEditMode, startSavingStatement , startDeletingStatement, loadYearlySum, loadYear} from './actions';
+import { enterEditMode, leaveEditMode, startSavingStatement , startDeletingStatement} from './actions';
 
 export function Statement(props) {
     const statement = props.statement;
@@ -19,7 +19,12 @@ export function Statement(props) {
     }
 
     const onCancel = () => {
-        dispatch(leaveEditMode(statement));
+        if (amount === 0 || statement.amount === 0) {
+            onDelete();
+        } else {
+            dispatch(leaveEditMode(statement));
+        }
+
     }
 
     const onSave = () => {
@@ -33,106 +38,74 @@ export function Statement(props) {
             description,
             increase,
         }));
-
-        window.location.reload();
-        // dispatch(loadYear(year));
-        // dispatch(loadYearlySum(year));
     }
 
     const onDelete = () => {
         dispatch(startDeletingStatement(statement));
     }
-    
-    if (statement.isEditing) {
-        if (increase === 0) {
-            return (
-                <div className="statement-root font">
-                    <div className="statement-left">
-                        <input type="number" step="0.01" value={amount} onChange={e => setAmount(e.target.value)} />
-                        <input type="radio" value="Withdrawal" name="increase" onChange={e => setIncrease(0)} defaultChecked/> Withdrawal
-                        <input type="radio" value="Deposit" name="increase" onChange={e => setIncrease(1)}/> Deposit
-                        <input type="number" value={year} onChange={e => setYear(e.target.value)} />
-                        <input type="number" value={month} onChange={e => setMonth(e.target.value)} />
-                        <input type="number" value={day} onChange={e => setDay(e.target.value)} />
-                    </div>
-                    <div className="statement-right">
-                    <label htmlFor="categories">
-                            Category:
-                            <select name="categories" className="category" value={category} onChange={e => setCategory(e.target.value)}>
-                                <option value=""></option>
-                                <option value="Groceries">Groceries</option>
-                                <option value="Shopping">Shopping</option>
-                                <option value="Transportation">Transportation</option>
-                                <option value="Entertainment">Entertainment</option>
-                                <option value="Income">Income</option>
-                            </select>
-                        </label>
-                        <input type="text" value={description} onChange={e => setDescription(e.target.value)} />
-                        <button onClick={onSave}>save</button>
-                        <button onClick={onCancel}>cancel</button>
-                        <button onClick={onDelete} className="delete-button">delete</button>
-                    </div>
-                </div>
-            );
-        } else {
-            return (
-                <div className="statement-root font">
-                    <div className="statement-left">
-                        <input type="number" step="0.01" value={amount} onChange={e => setAmount(e.target.value)} />
-                        <input type="radio" value="Withdrawal" name="increase" onChange={e => setIncrease(0)}/> Withdrawal
-                        <input type="radio" value="Deposit" name="increase" onChange={e => setIncrease(1)} defaultChecked/> Deposit
-                        <input type="number" value={year} onChange={e => setYear(e.target.value)} />
-                        <input type="number" value={month} onChange={e => setMonth(e.target.value)} />
-                        <input type="number" value={day} onChange={e => setDay(e.target.value)} />
-                    </div>
-                    <div className="statement-right">
-                    <label htmlFor="categories">
-                            Category:
-                            <select name="categories" className="category" value={category} onChange={e => setCategory(e.target.value)}>
-                                <option value=""></option>
-                                <option value="Groceries">Groceries</option>
-                                <option value="Shopping">Shopping</option>
-                                <option value="Transportation">Transportation</option>
-                                <option value="Entertainment">Entertainment</option>
-                                <option value="Income">Income</option>
-                            </select>
-                        </label>
-                        <input type="text" value={description} onChange={e => setDescription(e.target.value)} />
-                        <button onClick={onSave}>save</button>
-                        <button onClick={onCancel}>cancel</button>
-                        <button onClick={onDelete} className="delete-button">delete</button>
-                    </div>
-                </div>
-            );
-        }
 
+    if (statement.isEditing) {
+        return (
+            <div className="statement-root supporting-font">
+                <div className="statement-left edit-statement">
+                    <label>Amount: <input type="number" value={amount} onChange={e => setAmount(e.target.value)} /></label>
+                    {console.log(increase)}
+                    <div className="increase">
+                        Type:
+                        <label>Withdrawal<input type="radio" value={increase} name="increase" onChange={e => setIncrease(0)} checked={!increase}/></label>
+                        <label>Deposit<input type="radio" value={increase} name="increase" onChange={e => setIncrease(1)} checked={increase}/></label>
+                    </div>
+                    <label>Year: <input type="number" value={year} onChange={e => setYear(e.target.value)} /></label>
+                    <label>Month: <input type="number" value={month} onChange={e => setMonth(e.target.value)} /></label>
+                    <label>Day: <input type="number" value={day} onChange={e => setDay(e.target.value)} /></label>
+                </div>
+                <div className="statement-right edit-statement">
+                    <label htmlFor="categories">
+                        Category:
+                        <select name="categories" className="categories" value={category} onChange={e => setCategory(e.target.value)}>
+                            <option value=""></option>
+                            <option value="Groceries">Groceries</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Transportation">Transportation</option>
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Income">Income</option>
+                        </select>
+                    </label>
+                    <label>Description: <textarea type="text" value={description} onChange={e => setDescription(e.target.value)} /></label>
+                    <div className="editing-buttons">
+                        <button onClick={onSave}>Save</button>
+                        <button onClick={onCancel}>Cancel</button>
+                        <button onClick={onDelete}>Delete</button>
+                    </div>
+                </div>
+            </div>
+        );
     } else {
-        console.log({increase});
         if (increase === 0) {
             return (
                 <div className="statement-root font withdrawal">
                     <div className="statement-left">
-                        <span className="amount">-${amount}</span>
-                        <span className="date">{month}/{day}/{year}</span>
+                        <div className="amount main-font">$ -{amount}</div>
+                        <div className="date supporting-font">{month}/{day}/{year}</div>
                     </div>
                     <div className="statement-right">
-                        <span className="category">{category}</span>
-                        <span className="description">{description}</span>
-                        <button onClick={onEdit}>edit</button>
+                        <div className="category main-font">{category}</div>
+                        <div className="description supporting-font">{description}</div>
+                        <button className="supporting-font edit-button" onClick={onEdit}>Edit Statement</button>
                     </div>
                 </div>
             );
         } else {
             return (
-                <div className="statement-root font  deposit">
+                <div className="statement-root font deposit">
                     <div className="statement-left">
-                        <span className="amount">${amount}</span>
-                        <span className="date">{month}/{day}/{year}</span>
+                        <div className="amount main-font">$ {amount}</div>
+                        <div className="date supporting-font">{month}/{day}/{year}</div>
                     </div>
                     <div className="statement-right">
-                        <span className="category">{category}</span>
-                        <span className="description">{description}</span>
-                        <button onClick={onEdit}>edit</button>
+                        <div className="category main-font">{category}</div>
+                        <div className="description supporting-font">{description}</div>
+                        <button className="supporting-font edit-button" onClick={onEdit}>Edit Statement</button>
                     </div>
                 </div>
             );

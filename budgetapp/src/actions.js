@@ -109,7 +109,6 @@ export function loadYearlySum(year) {
             .then(checkForErrors)
             .then(response => response.json())
             .then(data => {
-                console.log("year" + data);
                 if (data.ok) {
                    dispatch(loadSum(data.budget))
                 }
@@ -125,7 +124,6 @@ export function loadMonthlySum(month, year) {
             .then(response => response.json())
             .then(data => {
                 if (data.ok) {
-                    console.log("month" + data.budget);
                    dispatch(loadSumMonth(data.budget))
                 }
             })
@@ -165,6 +163,12 @@ export function startSavingStatement(statement) {
         },
         body: JSON.stringify(statement),
     }
+
+    // To make sure we show only the current year/month sum
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+
     return dispatch => {
         dispatch(startWaiting());
         fetch(`${host}/statements/${statement.id}`, options)
@@ -173,9 +177,11 @@ export function startSavingStatement(statement) {
             .then(data => {
                 if (data.ok) {
                    dispatch(finishSavingStatement(statement));
+                   dispatch(loadYear(year));
+                   dispatch(loadMonthlySum(month, year));
+                   dispatch(loadYearlySum(year));
                 }
-                dispatch(stopWaiting());
-                //setTimeout(() => dispatch(stopWaiting(), 10000));
+                setTimeout(() => dispatch(stopWaiting()), 300);
             })
             .catch(e => console.error(e));
     }
