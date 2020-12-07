@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { enterEditMode, leaveEditMode, startSavingStatement , startDeletingStatement} from './actions';
+import { enterEditMode, leaveEditMode, startSavingStatement, startDeletingStatement} from './actions';
 
 export function Statement(props) {
     const statement = props.statement;
@@ -49,11 +49,10 @@ export function Statement(props) {
             <div className="statement-root supporting-font">
                 <div className="statement-left edit-statement">
                     <label>Amount: <input type="number" value={amount} onChange={e => setAmount(e.target.value)} /></label>
-                    {console.log(increase)}
                     <div className="increase">
                         Type:
-                        <label>Withdrawal<input type="radio" value={increase} name="increase" onChange={e => setIncrease(0)} checked={!increase}/></label>
-                        <label>Deposit<input type="radio" value={increase} name="increase" onChange={e => setIncrease(1)} checked={increase}/></label>
+                        <label>Withdrawal<input type="radio" value={increase} name={statement.id} onChange={e => setIncrease(0)} checked={!increase}/></label>
+                        <label>Deposit<input type="radio" value={increase} name={statement.id} onChange={e => setIncrease(1)} checked={increase}/></label>
                     </div>
                     <label>Year: <input type="number" value={year} onChange={e => setYear(e.target.value)} /></label>
                     <label>Month: <input type="number" value={month} onChange={e => setMonth(e.target.value)} /></label>
@@ -68,10 +67,13 @@ export function Statement(props) {
                             <option value="Shopping">Shopping</option>
                             <option value="Transportation">Transportation</option>
                             <option value="Entertainment">Entertainment</option>
+                            <option value="Food and Drinks">Food and Drinks</option>
+                            <option value="School">School</option>
+                            <option value="Health and Wellbeing">Health and Wellbeing</option>
                             <option value="Income">Income</option>
                         </select>
                     </label>
-                    <label>Description: <textarea type="text" value={description} onChange={e => setDescription(e.target.value)} /></label>
+                    <label>Description: <textarea value={description} onChange={e => setDescription(e.target.value)} /></label>
                     <div className="editing-buttons">
                         <button onClick={onSave}>Save</button>
                         <button onClick={onCancel}>Cancel</button>
