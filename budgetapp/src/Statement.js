@@ -30,7 +30,6 @@ export function Statement(props) {
             dispatch(loadYear(currYear)); 
             setTimeout(() => dispatch(stopWaiting()), 100);         
         }
-
     }
 
     const onSave = () => {
@@ -118,6 +117,5 @@ export function Statement(props) {
                 </div>
             );
         }
-
     }
 }

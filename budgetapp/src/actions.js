@@ -204,7 +204,6 @@ export function startDeletingStatement(statement) {
             .then(data => {
                 if (data.ok) {
                    dispatch(finishDeletingStatement(statement));
-                   dispatch(loadYear(year));
                    dispatch(loadMonthlySum(month, year));
                    dispatch(loadYearlySum(year));
                 }

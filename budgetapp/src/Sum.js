@@ -5,6 +5,4 @@ export function Sum(props) {
         return (
             <div className="sum main-font">$ {sum.sum * -1}</div> 
         );
-
-    
 }
