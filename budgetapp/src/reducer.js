@@ -13,14 +13,11 @@ function reducer(state=initialState, action) {
             return {
                 ...state,
                 isWaiting: true,
-
-                // statments: [],
             }
         case Action.StopWaiting:
             return {
                 ...state,
                 isWaiting: false,
-                // statements: [],
             }
         case Action.LoadStatements:
             return {

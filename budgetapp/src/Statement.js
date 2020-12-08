@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { enterEditMode, leaveEditMode, startSavingStatement, startDeletingStatement} from './actions';
+import { enterEditMode, leaveEditMode, startSavingStatement, startDeletingStatement, loadYear, startWaiting, stopWaiting} from './actions';
 
 export function Statement(props) {
     const statement = props.statement;
@@ -14,6 +14,9 @@ export function Statement(props) {
     const [description, setDescription] = useState(statement.description);
     const [increase, setIncrease] = useState(statement.increase);
 
+    const date = new Date();
+    const currYear = date.getFullYear();
+
     const onEdit = () => {
         dispatch(enterEditMode(statement));
     }
@@ -23,6 +26,9 @@ export function Statement(props) {
             onDelete();
         } else {
             dispatch(leaveEditMode(statement));
+            dispatch(startWaiting());
+            dispatch(loadYear(currYear)); 
+            setTimeout(() => dispatch(stopWaiting()), 100);         
         }
 
     }

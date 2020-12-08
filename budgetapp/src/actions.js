@@ -90,13 +90,12 @@ const host = 'https://project2.vvebdesigns.me:8442';
 
 export function loadYear(year) {
     return dispatch => {
-
         fetch(`${host}/statements/${year}`)
             .then(checkForErrors)
             .then(response => response.json())
             .then(data => {
                 if (data.ok) {
-                   dispatch(loadStatements(data.budget))
+                    dispatch(loadStatements(data.budget))
                 }
             })
             .catch(e => console.error(e));
@@ -191,14 +190,25 @@ export function startDeletingStatement(statement) {
     const options = {
         method: 'DELETE',
     }
+
+    // To make sure we show only the current year/month sum
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+
     return dispatch => {
+        dispatch(startWaiting());
         fetch(`${host}/statements/${statement.id}`, options)
             .then(checkForErrors)
             .then(response => response.json())
             .then(data => {
                 if (data.ok) {
                    dispatch(finishDeletingStatement(statement));
+                   dispatch(loadYear(year));
+                   dispatch(loadMonthlySum(month, year));
+                   dispatch(loadYearlySum(year));
                 }
+                setTimeout(() => dispatch(stopWaiting()), 300);
             })
             .catch(e => console.error(e));
     }
